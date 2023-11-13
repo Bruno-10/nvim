@@ -6,7 +6,6 @@ lsp.ensure_installed({
     'gopls',
     'rust_analyzer',
     'tsserver',
-    'vuels',
     'vimls',
     'volar',
 })
@@ -39,6 +38,24 @@ lsp.set_preferences({
     }
 })
 
+lspconfig = require("lspconfig")
+util = require "lspconfig/util"
+
+-- Config Go to run staticcheck and unusedparams
+lspconfig.gopls.setup {
+    cmd = {"gopls", "serve"},
+    filetypes = {"go", "gomod"},
+    root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+    settings = {
+      gopls = {
+        analyses = {
+          unusedparams = true,
+        },
+        staticcheck = true,
+      },
+    },
+}
+
 lsp.on_attach(function(client, bufnr)
   local opts = {buffer = bufnr, remap = false}
 
@@ -51,6 +68,7 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
   vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
   vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
+  vim.keymap.set("n", "<leader>D", function () vim.lsp.buf.type_definition() end, opts)
   vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
 end)
 

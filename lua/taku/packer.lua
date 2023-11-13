@@ -30,8 +30,10 @@ return require('packer').startup(function(use)
 
     use {
         'nvim-lualine/lualine.nvim',
+        as = 'lualine',
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     }
+    use('sbdchd/neoformat')
     use {
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v1.x',
@@ -61,5 +63,8 @@ return require('packer').startup(function(use)
             require('Comment').setup()
         end
     }
+    
+    -- Magnificent folding
+    use {'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async'}
 end)
 
